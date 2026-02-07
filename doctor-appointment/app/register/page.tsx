@@ -1,7 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";   // ✅ NEW
+import { useRouter } from "next/navigation";
+import { signIn } from "next-auth/react";
+   // ✅ NEW
 
 export default function RegisterPage() {
   const [email, setEmail] = useState("");
@@ -51,6 +53,12 @@ export default function RegisterPage() {
         <br /><br />
 
         <button type="submit">Create Account</button>
+<br /><br />
+
+<button onClick={() => signIn("google")}>
+  Sign up with Google
+</button>
+
       </form>
     </div>
   );

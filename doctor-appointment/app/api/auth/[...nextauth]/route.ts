@@ -1,11 +1,9 @@
-import NextAuth from "next-auth"
-import GoogleProvider from "next-auth/providers/google"
-import { PrismaAdapter } from "@next-auth/prisma-adapter"
-import { PrismaClient } from "@prisma/client"
+import NextAuth from "next-auth";
+import GoogleProvider from "next-auth/providers/google";
+import { PrismaAdapter } from "@auth/prisma-adapter";
+import { prisma } from "@/lib/prisma";
 
-const prisma = new PrismaClient()
-
-export const authOptions = {
+const handler = NextAuth({
   adapter: PrismaAdapter(prisma),
 
   providers: [
@@ -15,17 +13,20 @@ export const authOptions = {
     }),
   ],
 
+  session: { strategy: "database" },
+
   callbacks: {
-    async session({ session, user }) {
-      if (session.user) {
-        session.user.id = user.id
-      }
-      return session
-    }
+    async signIn() {
+      return true;
+    },
+
+    async redirect() {
+      // ✅ Always go to role selection after Google login
+      return "/select-role";
+    },
   },
 
   secret: process.env.NEXTAUTH_SECRET,
-}
+});
 
-const handler = NextAuth(authOptions)
-export { handler as GET, handler as POST }
+export { handler as GET, handler as POST };

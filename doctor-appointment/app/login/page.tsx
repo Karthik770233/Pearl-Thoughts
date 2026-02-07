@@ -1,6 +1,8 @@
 "use client";
 
 import { useState } from "react";
+import { signIn } from "next-auth/react";
+
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -39,6 +41,12 @@ export default function LoginPage() {
         <br /><br />
 
         <button type="submit">Login</button>
+	<br/><br/>
+
+	<button onClick={() => signIn("google")}>
+  	Sign in with Google
+	</button>
+
       </form>
 
       <br />
